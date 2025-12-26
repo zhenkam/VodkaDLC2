@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>VodkaClient</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: #000000;
+    color: #fff;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Красивый скроллбар */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0a0a0a;
+    border-left: 1px solid #1a1a1a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #2a2a2a, #1a1a1a);
+    border-radius: 6px;
+    border: 2px solid #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #3a3a3a, #2a2a2a);
+}
+
+/* Анимированный фон с частицами */
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    background: radial-gradient(ellipse at center, #0f0f0f 0%, #000000 100%);
+}
+
+.particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: rgba(80, 80, 80, 0.3);
+    border-radius: 50%;
+    animation: float 20s infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0) translateX(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-100vh) translateX(50px);
+        opacity: 0;
+    }
+}
+
+/* Навигация */
+nav {
+    position: relative;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 60px;
+    background: rgba(10, 10, 10, 0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(40, 40, 40, 0.5);
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #fff;
+}
+
+.nav-links {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+}
+
+.nav-links a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    font-size: 14px;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(20, 20, 20, 0.8);
+    border-radius: 8px;
+}
+
+.nav-links a:hover {
+    color: #ffffff;
+    background: rgba(30, 30, 30, 0.9);
+}
+
+.nav-links a::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: #666666;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.lang-selector {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: rgba(20, 20, 20, 0.8);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.lang-selector:hover {
+    background: rgba(30, 30, 30, 0.9);
+}
+
+.btn-login {
+    padding: 10px 24px;
+    background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+    border: 1px solid rgba(60, 60, 60, 0.5);
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.btn-login:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+    background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+}
+
+/* Главная секция */
+.hero {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 100px 60px;
+    min-height: 80vh;
+}
+
+.hero-content {
+    max-width: 600px;
+    animation: slideInLeft 1s ease-out;
+}
+
+.hero-content h1 {
+    font-size: 64px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.hero-content p {
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.btn-primary {
+    padding: 16px 40px;
+    background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+    border: 1px solid rgba(60, 60, 60, 0.5);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
+    background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+}
+
+.btn-secondary {
+    padding: 16px 40px;
+    background: rgba(20, 20, 20, 0.8);
+    border: 2px solid rgba(60, 60, 60, 0.5);
+    border-radius: 10px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+    background: rgba(30, 30, 30, 0.9);
+    border-color: #666666;
+}
+
+/* 3D Модель справа */
+.hero-visual {
+    position: relative;
+    width: 500px;
+    height: 500px;
+    animation: slideInRight 1s ease-out;
+}
+
+.model-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.model-glow {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, rgba(40, 40, 40, 0.3), transparent 70%);
+    border-radius: 50%;
+    animation: pulse 3s ease-in-out infinite;
+}
+
+.model-cube {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    transform-style: preserve-3d;
+    animation: rotate3d 20s linear infinite;
+}
+
+.cube-face {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(135deg, rgba(30, 30, 30, 0.4), rgba(20, 20, 20, 0.2));
+    border: 2px solid rgba(60, 60, 60, 0.4);
+    backdrop-filter: blur(10px);
+}
+
+.cube-face:nth-child(1) { transform: rotateY(0deg) translateZ(150px); }
+.cube-face:nth-child(2) { transform: rotateY(90deg) translateZ(150px); }
+.cube-face:nth-child(3) { transform: rotateY(180deg) translateZ(150px); }
+.cube-face:nth-child(4) { transform: rotateY(-90deg) translateZ(150px); }
+.cube-face:nth-child(5) { transform: rotateX(90deg) translateZ(150px); }
+.cube-face:nth-child(6) { transform: rotateX(-90deg) translateZ(150px); }
+
+@keyframes rotate3d {
+    0% { transform: rotateX(0deg) rotateY(0deg); }
+    100% { transform: rotateX(360deg) rotateY(360deg); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.1); opacity: 0.8; }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Секция с преимуществами */
+.features {
+    position: relative;
+    z-index: 10;
+    padding: 100px 60px;
+    background: rgba(5, 5, 5, 0.8);
+}
+
+/* Секция с изображением водки */
+.vodka-section {
+    position: relative;
+    z-index: 10;
+    padding: 80px 60px;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vodka-container {
+    max-width: 1400px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.vodka-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+    transition: transform 0.3s ease;
+}
+
+.vodka-image:hover {
+    transform: scale(1.02);
+}
+
+.features-header {
+    text-align: center;
+    margin-bottom: 80px;
+}
+
+.features-header h2 {
+    font-size: 52px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+
+.features-header p {
+    font-size: 20px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.feature-card {
+    background: rgba(20, 20, 20, 0.8);
+    border: 1px solid rgba(60, 60, 60, 0.5);
+    border-radius: 8px;
+    padding: 40px;
+    transition: all 0.4s ease;
+    backdrop-filter: blur(10px);
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    background: rgba(30, 30, 30, 0.9);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.feature-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(20, 25, 35, 0.8);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(40, 45, 55, 0.6);
+}
+
+.feature-card h3 {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #fff;
+}
+
+.feature-card p {
+    font-size: 17px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.feature-card {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0;
+}
+
+.feature-card:nth-child(1) { animation-delay: 0.1s; }
+.feature-card:nth-child(2) { animation-delay: 0.2s; }
+.feature-card:nth-child(3) { animation-delay: 0.3s; }
+.feature-card:nth-child(4) { animation-delay: 0.4s; }
+.feature-card:nth-child(5) { animation-delay: 0.5s; }
+.feature-card:nth-child(6) { animation-delay: 0.6s; }
+
+/* Модальное окно с тарифами */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+    animation: fadeIn 0.3s ease;
+}
+
+.modal.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: rgba(15, 15, 15, 0.95);
+    border: 1px solid rgba(60, 60, 60, 0.5);
+    border-radius: 16px;
+    padding: 40px;
+    max-width: 1200px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    animation: slideUp 0.4s ease;
+}
+
+.modal-close {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 32px;
+    color: #fff;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: transform 0.3s;
+}
+
+.modal-close:hover {
+    transform: rotate(90deg);
+}
+
+.modal-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.modal-header h2 {
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.modal-header p {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.pricing-card {
+    background: rgba(20, 20, 20, 0.8);
+    border: 1px solid rgba(60, 60, 60, 0.5);
+    border-radius: 12px;
+    padding: 30px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.pricing-card:hover {
+    transform: translateY(-10px);
+    background: rgba(30, 30, 30, 0.9);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+}
+
+.pricing-card h3 {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.pricing-card .price {
+    font-size: 36px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 30px;
+}
+
+.pricing-card .price span {
+    font-size: 18px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.btn-buy {
+    width: 100%;
+    padding: 14px 30px;
+    background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+    border: 1px solid rgba(60, 60, 60, 0.5);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-buy:hover {
+    background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Модальное окно авторизации */
+.auth-modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    backdrop-filter: blur(10px);
+}
+
+.auth-modal.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.auth-content {
+    background: rgba(15, 15, 15, 0.95);
+    border: 1px solid rgba(60, 60, 60, 0.5);
+    border-radius: 16px;
+    padding: 40px;
+    max-width: 450px;
+    width: 90%;
+    position: relative;
+    animation: slideUp 0.4s ease;
+}
+
+.auth-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 12px;
+    background: rgba(20, 20, 20, 0.8);
+    border: 1px solid rgba(60, 60, 60, 0.5);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.3s;
+    text-align: center;
+    font-weight: 600;
+}
+
+.auth-tab.active {
+    background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+    color: #fff;
+    border-color: #666666;
+}
+
+.auth-form {
+    display: none;
+}
+
+.auth-form.active {
+    display: block;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(20, 20, 20, 0.8);
+    border: 1px solid rgba(60, 60, 60, 0.5);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #666666;
+    background: rgba(30, 30, 30, 0.9);
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #1a1a1a, #0a0a0a);
+    border: 1px solid rgba(60, 60, 60, 0.5);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-submit:hover {
+    background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+    transform: translateY(-2px);
+}
+
+.error-message {
+    background: rgba(255, 50, 50, 0.2);
+    border: 1px solid rgba(255, 50, 50, 0.5);
+    color: #ff5555;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: none;
+}
+
+.success-message {
+    background: rgba(50, 255, 50, 0.2);
+    border: 1px solid rgba(50, 255, 50, 0.5);
+    color: #55ff55;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: none;
+}
+
+.user-info {
+    display: none;
+    align-items: center;
+    gap: 15px;
+    padding: 8px 16px;
+    background: rgba(20, 20, 20, 0.8);
+    border-radius: 8px;
+}
+
+.user-info.active {
+    display: flex;
+}
+
+.user-uid {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.btn-logout {
+    padding: 6px 12px;
+    background: rgba(255, 50, 50, 0.2);
+    border: 1px solid rgba(255, 50, 50, 0.5);
+    border-radius: 6px;
+    color: #ff5555;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-logout:hover {
+    background: rgba(255, 50, 50, 0.3);
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 60px 30px;
+    }
+    
+    .hero-content {
+        max-width: 100%;
+    }
+    
+    .hero-buttons {
+        justify-content: center;
+    }
+    
+    .hero-visual {
+        margin-top: 60px;
+        width: 400px;
+        height: 400px;
+    }
+    
+    nav {
+        padding: 20px 30px;
+    }
+    
+    .nav-links {
+        gap: 20px;
+    }
+    
+    .features {
+        padding: 60px 30px;
+    }
+    
+    .features-header h2 {
+        font-size: 36px;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 36px;
+    }
+    
+    .hero-content p {
+        font-size: 16px;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .btn-primary, .btn-secondary {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .hero-visual {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .model-cube {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .cube-face {
+        width: 200px;
+        height: 200px;
+    }
+    
+    .cube-face:nth-child(1) { transform: rotateY(0deg) translateZ(100px); }
+    .cube-face:nth-child(2) { transform: rotateY(90deg) translateZ(100px); }
+    .cube-face:nth-child(3) { transform: rotateY(180deg) translateZ(100px); }
+    .cube-face:nth-child(4) { transform: rotateY(-90deg) translateZ(100px); }
+    .cube-face:nth-child(5) { transform: rotateX(90deg) translateZ(100px); }
+    .cube-face:nth-child(6) { transform: rotateX(-90deg) translateZ(100px); }
+    
+    .nav-links {
+        display: none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Анимированный фон -->
+<div class="particles" id="particles"></div>
+
+<!-- Навигация -->
+<nav>
+    <div class="logo">VodkaClient</div>
+    <div class="nav-links">
+        <a href="https://t.me/SmertnixVteste" target="_blank">Поддержка</a>
+        <a href="#">Скачать лаунчер</a>
+        <a href="#" id="buyBtn">Купить</a>
+        <div class="lang-selector" id="langSelector">
+            <span>Русский</span>
+        </div>
+        <div id="userInfo" class="user-info">
+            <span id="usernameDisplay"></span>
+            <span class="user-uid" id="uidDisplay"></span>
+            <button class="btn-logout" id="logoutBtn">Выйти</button>
+        </div>
+        <button class="btn-login" id="loginBtn">Войти в кабинет</button>
+    </div>
+</nav>
+
+<!-- Главная секция -->
+<section class="hero">
+    <div class="hero-content">
+        <h1>О нас</h1>
+        <p>Мы предоставляем вам лучший клиент для комфортной игры, который даст вам наилучшие впечатления от игры.</p>
+        <div class="hero-buttons">
+            <button class="btn-primary" id="watchBtn">Смотреть</button>
+            <button class="btn-secondary" id="detailsBtn">Подробнее</button>
+        </div>
+    </div>
+    
+    <div class="hero-visual">
+        <div class="model-container">
+            <div class="model-glow"></div>
+            <div class="model-cube">
+                <div class="cube-face"></div>
+                <div class="cube-face"></div>
+                <div class="cube-face"></div>
+                <div class="cube-face"></div>
+                <div class="cube-face"></div>
+                <div class="cube-face"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Секция преимуществ -->
+<section class="features">
+    <div class="features-header">
+        <h2>Наши преимущества</h2>
+        <p>Мы кратко изложили вам то, что вы гарантированно получите после покупки нашего клиента.</p>
+    </div>
+    
+    <div class="features-grid">
+        <div class="feature-card">
+            <h3>Красивый внешний вид</h3>
+            <p>В нашем клиенте присутствует большое количество визуальных функций, которые сделают вашу игру более красочной. А так же вы можете настроить оформление клиента под себя, сделав его по настоящему красивым.</p>
+        </div>
+        
+        <div class="feature-card">
+            <h3>Настраиваемость</h3>
+            <p>В нашем клиенте вы можете настроить практически любую функцию под себя, а так же использовать конфигурации других пользователей, благодаря этому вы сможете использовать наш клиент максимуме его возможностей.</p>
+        </div>
+        
+        <div class="feature-card">
+            <h3>Оптимизация</h3>
+            <p>Мы постоянно улучшаем оптимизацию нашего клиента с самой первой версии. Благодаря этому вы сможете запустить наш клиент даже на слабых компьютерах.</p>
+        </div>
+        
+        <div class="feature-card">
+            <h3>Частые обновления</h3>
+            <p>Мы регулярно обновляем функционал в нашем клиенте, добавляя новые функции, а так же совершенствуя уже существующие. Благодаря этому наш клиент имеет преимущество над существующие сервера.</p>
+        </div>
+        
+        <div class="feature-card">
+            <h3>Лучшая поддержка</h3>
+            <p>У нас самая лучшая поддержка, которая разбирается в своем деле и сможет помочь вам по любому вопросу связанному с нашим клиетом.</p>
+        </div>
+        
+        <div class="feature-card">
+            <h3>Удобство использования</h3>
+            <p>Наш клиент разработан с учетом удобства использования. Интуитивно понятный интерфейс и простая настройка позволят вам быстро освоиться и начать играть с максимальным комфортом.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Секция с изображением -->
+<section class="vodka-section">
+    <div class="vodka-container">
+        <img src="Vodka.png" alt="Vodka" class="vodka-image">
+    </div>
+</section>
+
+    </div>
+</section>
+
+<!-- Модальное окно с тарифами -->
+<div id="pricingModal" class="modal">
+    <div class="modal-content">
+        <button class="modal-close" id="closeModal">&times;</button>
+        <div class="modal-header">
+            <h2>Выберите тариф</h2>
+            <p>Выберите подходящий для вас план подписки</p>
+        </div>
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <h3>1 Месяц</h3>
+                <div class="price">99 <span>рублей</span></div>
+                <a href="https://t.me/Attack_T1rov" target="_blank" class="btn-buy">Оплатить</a>
+            </div>
+            <div class="pricing-card">
+                <h3>6 Месяцев</h3>
+                <div class="price">299 <span>рублей</span></div>
+                <a href="https://t.me/Attack_T1rov" target="_blank" class="btn-buy">Оплатить</a>
+            </div>
+            <div class="pricing-card">
+                <h3>LifeTime</h3>
+                <div class="price">499 <span>рублей</span></div>
+                <a href="https://t.me/Attack_T1rov" target="_blank" class="btn-buy">Оплатить</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно авторизации -->
+<div id="authModal" class="auth-modal">
+    <div class="auth-content">
+        <button class="modal-close" id="closeAuthModal">&times;</button>
+        
+        <div class="auth-tabs">
+            <div class="auth-tab active" data-tab="login">Вход</div>
+            <div class="auth-tab" data-tab="register">Регистрация</div>
+        </div>
+
+        <div id="errorMessage" class="error-message"></div>
+        <div id="successMessage" class="success-message"></div>
+
+        <!-- Форма входа -->
+        <form id="loginForm" class="auth-form active">
+            <div class="form-group">
+                <label>Логин</label>
+                <input type="text" id="loginUsername" placeholder="Введите логин" required>
+            </div>
+            <div class="form-group">
+                <label>Пароль</label>
+                <input type="password" id="loginPassword" placeholder="Введите пароль" required>
+            </div>
+            <button type="submit" class="btn-submit">Войти</button>
+        </form>
+
+        <!-- Форма регистрации -->
+        <form id="registerForm" class="auth-form">
+            <div class="form-group">
+                <label>Логин</label>
+                <input type="text" id="registerUsername" placeholder="Минимум 3 символа" required>
+            </div>
+            <div class="form-group">
+                <label>Пароль</label>
+                <input type="password" id="registerPassword" placeholder="Минимум 6 символов" required>
+            </div>
+            <button type="submit" class="btn-submit">Зарегистрироваться</button>
+        </form>
+    </div>
+</div>
+
+<script>
+// Создание анимированных частиц
+const particlesContainer = document.getElementById('particles');
+for (let i = 0; i < 50; i++) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.left = Math.random() * 100 + '%';
+    particle.style.animationDelay = Math.random() * 20 + 's';
+    particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+    particlesContainer.appendChild(particle);
+}
+
+// Модальное окно тарифов
+const modal = document.getElementById('pricingModal');
+const buyBtn = document.getElementById('buyBtn');
+const closeModal = document.getElementById('closeModal');
+
+buyBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    modal.classList.add('active');
+});
+
+closeModal.addEventListener('click', () => {
+    modal.classList.remove('active');
+});
+
+modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+        modal.classList.remove('active');
+    }
+});
+
+// Модальное окно авторизации
+const authModal = document.getElementById('authModal');
+const loginBtn = document.getElementById('loginBtn');
+const closeAuthModal = document.getElementById('closeAuthModal');
+const authTabs = document.querySelectorAll('.auth-tab');
+const loginForm = document.getElementById('loginForm');
+const registerForm = document.getElementById('registerForm');
+const errorMessage = document.getElementById('errorMessage');
+const successMessage = document.getElementById('successMessage');
+const userInfo = document.getElementById('userInfo');
+const usernameDisplay = document.getElementById('usernameDisplay');
+const uidDisplay = document.getElementById('uidDisplay');
+const logoutBtn = document.getElementById('logoutBtn');
+
+// Открытие модального окна авторизации
+loginBtn.addEventListener('click', () => {
+    authModal.classList.add('active');
+});
+
+// Закрытие модального окна
+closeAuthModal.addEventListener('click', () => {
+    authModal.classList.remove('active');
+    hideMessages();
+});
+
+authModal.addEventListener('click', (e) => {
+    if (e.target === authModal) {
+        authModal.classList.remove('active');
+        hideMessages();
+    }
+});
+
+// Переключение вкладок
+authTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+        const tabName = tab.dataset.tab;
+        
+        authTabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        
+        if (tabName === 'login') {
+            loginForm.classList.add('active');
+            registerForm.classList.remove('active');
+        } else {
+            registerForm.classList.add('active');
+            loginForm.classList.remove('active');
+        }
+        
+        hideMessages();
+    });
+});
+
+// Функции для сообщений
+function showError(message) {
+    errorMessage.textContent = message;
+    errorMessage.style.display = 'block';
+    successMessage.style.display = 'none';
+}
+
+function showSuccess(message) {
+    successMessage.textContent = message;
+    successMessage.style.display = 'block';
+    errorMessage.style.display = 'none';
+}
+
+function hideMessages() {
+    errorMessage.style.display = 'none';
+    successMessage.style.display = 'none';
+}
+
+// Регистрация
+registerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideMessages();
+    
+    const username = document.getElementById('registerUsername').value;
+    const password = document.getElementById('registerPassword').value;
+    
+    try {
+        const response = await fetch('/api/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showSuccess(`Регистрация успешна! Ваш UID: ${data.uid}`);
+            setTimeout(() => {
+                updateUserInfo(data.username, data.uid);
+                authModal.classList.remove('active');
+                registerForm.reset();
+            }, 2000);
+        } else {
+            showError(data.message);
+        }
+    } catch (error) {
+        showError('Ошибка соединения с сервером');
+    }
+});
+
+// Вход
+loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideMessages();
+    
+    const username = document.getElementById('loginUsername').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    try {
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            showSuccess('Вход выполнен успешно!');
+            setTimeout(() => {
+                updateUserInfo(data.username, data.uid);
+                authModal.classList.remove('active');
+                loginForm.reset();
+            }, 1000);
+        } else {
+            showError(data.message);
+        }
+    } catch (error) {
+        showError('Ошибка соединения с сервером');
+    }
+});
+
+// Выход
+logoutBtn.addEventListener('click', async () => {
+    try {
+        await fetch('/api/logout', { method: 'POST' });
+        loginBtn.style.display = 'block';
+        userInfo.classList.remove('active');
+    } catch (error) {
+        console.error('Ошибка выхода');
+    }
+});
+
+// Обновление информации о пользователе
+function updateUserInfo(username, uid) {
+    usernameDisplay.textContent = username;
+    uidDisplay.textContent = `UID: ${uid}`;
+    loginBtn.style.display = 'none';
+    userInfo.classList.add('active');
+    
+    // Добавляем ссылку на личный кабинет
+    usernameDisplay.style.cursor = 'pointer';
+    usernameDisplay.style.textDecoration = 'underline';
+    usernameDisplay.onclick = () => {
+        window.location.href = '/cabinet.html';
+    };
+}
+
+// Проверка авторизации при загрузке
+async function checkAuth() {
+    try {
+        const response = await fetch('/api/check-auth');
+        const data = await response.json();
+        
+        if (data.authenticated) {
+            updateUserInfo(data.username, data.uid);
+        }
+    } catch (error) {
+        console.error('Ошибка проверки авторизации');
+    }
+}
+
+checkAuth();
+
+// Кнопка "Смотреть" - открывает видео на YouTube
+const watchBtn = document.getElementById('watchBtn');
+watchBtn.addEventListener('click', () => {
+    window.open('https://www.youtube.com/@VodkaClient', '_blank');
+});
+
+// Кнопка "Подробнее" - скроллит к секции с преимуществами
+const detailsBtn = document.getElementById('detailsBtn');
+detailsBtn.addEventListener('click', () => {
+    document.querySelector('.features').scrollIntoView({ 
+        behavior: 'smooth' 
+    });
+});
+
+// Кнопка "Русский" - показывает доступные языки
+const langSelector = document.getElementById('langSelector');
+langSelector.addEventListener('click', () => {
+    alert('Доступные языки:\n🇷🇺 Русский (текущий)\n🇬🇧 English (скоро)\n🇨🇳 中文 (скоро)');
+});
+</script>
+
+</body>
+</html>
