@@ -286,7 +286,53 @@ nav {
 .cube-face:nth-child(5) { transform: rotateX(90deg) translateZ(150px); }
 .cube-face:nth-child(6) { transform: rotateX(-90deg) translateZ(150px); }
 
+/* Внутренний куб с логотипом */
+.inner-cube {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    transform-style: preserve-3d;
+    animation: rotateInner 15s linear infinite reverse;
+    top: 50%;
+    left: 50%;
+    margin-left: -75px;
+    margin-top: -75px;
+}
+
+.inner-face {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background: linear-gradient(135deg, rgba(40, 40, 40, 0.6), rgba(30, 30, 30, 0.4));
+    border: 2px solid rgba(80, 80, 80, 0.6);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.inner-face img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+    opacity: 0.9;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+}
+
+.inner-face:nth-child(1) { transform: rotateY(0deg) translateZ(75px); }
+.inner-face:nth-child(2) { transform: rotateY(90deg) translateZ(75px); }
+.inner-face:nth-child(3) { transform: rotateY(180deg) translateZ(75px); }
+.inner-face:nth-child(4) { transform: rotateY(-90deg) translateZ(75px); }
+.inner-face:nth-child(5) { transform: rotateX(90deg) translateZ(75px); }
+.inner-face:nth-child(6) { transform: rotateX(-90deg) translateZ(75px); }
+
 @keyframes rotate3d {
+    0% { transform: rotateX(0deg) rotateY(0deg); }
+    100% { transform: rotateX(360deg) rotateY(360deg); }
+}
+
+@keyframes rotateInner {
     0% { transform: rotateX(0deg) rotateY(0deg); }
     100% { transform: rotateX(360deg) rotateY(360deg); }
 }
@@ -832,6 +878,25 @@ nav {
     .cube-face:nth-child(5) { transform: rotateX(90deg) translateZ(100px); }
     .cube-face:nth-child(6) { transform: rotateX(-90deg) translateZ(100px); }
     
+    .inner-cube {
+        width: 100px;
+        height: 100px;
+        margin-left: -50px;
+        margin-top: -50px;
+    }
+    
+    .inner-face {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .inner-face:nth-child(1) { transform: rotateY(0deg) translateZ(50px); }
+    .inner-face:nth-child(2) { transform: rotateY(90deg) translateZ(50px); }
+    .inner-face:nth-child(3) { transform: rotateY(180deg) translateZ(50px); }
+    .inner-face:nth-child(4) { transform: rotateY(-90deg) translateZ(50px); }
+    .inner-face:nth-child(5) { transform: rotateX(90deg) translateZ(50px); }
+    .inner-face:nth-child(6) { transform: rotateX(-90deg) translateZ(50px); }
+    
     .nav-links {
         display: none;
     }
@@ -884,6 +949,16 @@ nav {
                 <div class="cube-face"></div>
                 <div class="cube-face"></div>
                 <div class="cube-face"></div>
+                
+                <!-- Внутренний куб с логотипом -->
+                <div class="inner-cube">
+                    <div class="inner-face"><img src="logo.png" alt="VodkaClient Logo"></div>
+                    <div class="inner-face"><img src="logo.png" alt="VodkaClient Logo"></div>
+                    <div class="inner-face"><img src="logo.png" alt="VodkaClient Logo"></div>
+                    <div class="inner-face"><img src="logo.png" alt="VodkaClient Logo"></div>
+                    <div class="inner-face"><img src="logo.png" alt="VodkaClient Logo"></div>
+                    <div class="inner-face"><img src="logo.png" alt="VodkaClient Logo"></div>
+                </div>
             </div>
         </div>
     </div>
